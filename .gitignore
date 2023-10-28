@@ -1,4 +1,4 @@
 .vscode/
 .github/
-.pylintrc
-.script
+pylintrc
+script
