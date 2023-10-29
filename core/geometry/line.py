@@ -12,8 +12,7 @@ from dataclasses import dataclass
 # Internal Imports
 from core.geometry.point import Point2D
 from core.util.undefined import Undefined
-from core.exceptions.invalid_constructor import InvalidConstructor
-from core.exceptions.format_error import FormatError
+from core.exceptions import InvalidConstructor, FormatError
 
 
 # -----------------------------------------------------------------------------

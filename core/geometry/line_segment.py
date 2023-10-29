@@ -35,16 +35,20 @@ class _LineSegment2DConverter:
     Converts a line segment into a tuple of points
 
     ### Return
-
-    Returns a tuple in the form (Start Point, End Point)
+      Returns a tuple in the form (Start Point, End Point)
     """
     return self.start_point, self.end_point
 
 
   def to_str(self) -> str:
-    "Converts a line segment into a string"
+    """
+    Converts a line segment into a string
+
+    ### Return
+      Returns a string in the form "Start Point(x, y), End Point(x, y)"
+    """
     return f"""
-      Start Point({self.start_point.x}, {self.start_point.y}), End-Point({self.end_point.x}, {self.end_point.y})
+      Start Point({self.start_point.x}, {self.start_point.y}), End Point({self.end_point.x}, {self.end_point.y})
             """
 
 

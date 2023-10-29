@@ -12,8 +12,7 @@ from dataclasses import dataclass
 from core.util.quadrant import Quadrant
 from core.util.angle_unit import AngleUnit
 from core.util.orientation import Orientation
-from core.exceptions.format_error import FormatError
-from core.exceptions.invalid_constructor import InvalidConstructor
+from core.exceptions import FormatError, InvalidConstructor
 
 
 # -------------------------------------------------------------------------------------------------
