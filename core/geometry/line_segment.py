@@ -15,9 +15,7 @@ from dataclasses import dataclass
 from core.geometry.point import Point2D
 from core.util.undefined import Undefined
 from core.util.orientation import Orientation
-from core.exceptions.invalid_line_segment import InvalidLineSegment
-from core.exceptions.format_error import FormatError
-from core.exceptions.invalid_constructor import InvalidConstructor
+from core.exceptions import InvalidLineSegment, FormatError, InvalidConstructor
 
 
 # -----------------------------------------------------------------------------
