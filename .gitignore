@@ -1,4 +1,3 @@
 .vscode/*
-.github/*
+.pytest_cache/*
 pylintrc
-script.py
