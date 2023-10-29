@@ -1,3 +1,6 @@
 .vscode/*
 .pytest_cache/*
+core/exceptions/__pycach__/*
+core/geometry/__pycach__/*
+core/util/__pycach__/*
 pylintrc
