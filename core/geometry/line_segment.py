@@ -9,17 +9,15 @@ from __future__ import annotations
 from typing import Literal, SupportsIndex
 from fractions import Fraction
 from math import sqrt
-
-# External
-from attrs import define
+from dataclasses import dataclass
 
 # Internal
 from core.geometry.point import Point2D
 from core.util.undefined import Undefined
 from core.util.orientation import Orientation
-from core.errors.invalid_line_segment import InvalidLineSegment
-from core.errors.format_error import FormatError
-from core.errors.invalid_constructor import InvalidConstructor
+from core.exceptions.invalid_line_segment import InvalidLineSegment
+from core.exceptions.format_error import FormatError
+from core.exceptions.invalid_constructor import InvalidConstructor
 
 
 # -----------------------------------------------------------------------------
@@ -27,7 +25,7 @@ from core.errors.invalid_constructor import InvalidConstructor
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _LineSegment2DConverter:
   """Internal Implementation detail, do not use."""
   start_point: Point2D
@@ -67,7 +65,7 @@ class _LineSegment2DConverter:
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _LineSegment2DProperties(_LineSegment2DConverter):
   """Internal Implementation detail of LineSegment2D"""
   start_point: Point2D
@@ -180,7 +178,7 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _LineSegment2DConstructor(_LineSegment2DProperties):
   """ Do not use. """
   start_point: Point2D
@@ -369,7 +367,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class LineSegment2D(_LineSegment2DProperties):
   """
   Class representing a Line Segment in 2D space.

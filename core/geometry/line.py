@@ -4,23 +4,23 @@
 
 from __future__ import annotations
 
-# External Imports
+# Standard Imports
 from typing import Literal
 from fractions import Fraction
-from attrs import define
+from dataclasses import dataclass
 
 # Internal Imports
 from core.geometry.point import Point2D
 from core.util.undefined import Undefined
-from core.errors.invalid_constructor import InvalidConstructor
-from core.errors.format_error import FormatError
+from core.exceptions.invalid_constructor import InvalidConstructor
+from core.exceptions.format_error import FormatError
 
 
 # -----------------------------------------------------------------------------
 # Converter
 # -----------------------------------------------------------------------------
 
-@define
+@dataclass
 class _Line2DConverter:
   point_a: Point2D
   point_b: Point2D
@@ -74,7 +74,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Line2DProperties(_Line2DConverter):
   """_"""
   point_a: Point2D
@@ -207,7 +207,7 @@ class _Line2DProperties(_Line2DConverter):
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Line2DConstructor(_Line2DProperties):
   """ Should not be accessed."""
   point_a: Point2D
@@ -372,7 +372,7 @@ class _Line2DConstructor(_Line2DProperties):
 # -----------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class Line2D(_Line2DConstructor):
   """Class representing a line projected in 2D space."""
   point_a: Point2D

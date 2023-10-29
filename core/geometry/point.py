@@ -4,16 +4,16 @@
 
 from __future__ import annotations
 
-
+# Standard Imports
 from math import sqrt, pi, sin, cos
-from attrs import define
+from dataclasses import dataclass
 
-
+# Internal Imports
 from core.util.quadrant import Quadrant
 from core.util.angle_unit import AngleUnit
 from core.util.orientation import Orientation
-from core.errors.format_error import FormatError
-from core.errors.invalid_constructor import InvalidConstructor
+from core.exceptions.format_error import FormatError
+from core.exceptions.invalid_constructor import InvalidConstructor
 
 
 # -------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ from core.errors.invalid_constructor import InvalidConstructor
 # -------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Point2DConverter:
   x: float
   y: float
@@ -59,7 +59,7 @@ class _Point2DConverter:
 # -------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _PointProperties(_Point2DConverter):
   """_"""
   x: float
@@ -108,7 +108,7 @@ class _PointProperties(_Point2DConverter):
 # --------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Point2DConstructor(_PointProperties):
   """A class representing a single point in 2d space."""
   x: float
@@ -203,7 +203,7 @@ class _Point2DConstructor(_PointProperties):
 # --------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class Point2D(_Point2DConstructor):
   """Class Representing a Point2D"""
   x: float

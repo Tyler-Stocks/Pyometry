@@ -8,16 +8,14 @@ from __future__ import annotations
 
 # Standard
 from math import pi, sqrt, atan, cos, sin
-
-# External
-from attrs import define
+from dataclasses import dataclass
 
 # Internal
 from core.util.quadrant import Quadrant
 from core.util.angle_unit import AngleUnit
-from core.errors.invalid_vector import InvalidVector
-from core.errors.format_error import FormatError
-from core.errors.invalid_constructor import InvalidConstructor
+from core.exceptions.invalid_vector import InvalidVector
+from core.exceptions.format_error import FormatError
+from core.exceptions.invalid_constructor import InvalidConstructor
 
 
 # --------------------------------------------------------------------------------------------------
@@ -25,7 +23,7 @@ from core.errors.invalid_constructor import InvalidConstructor
 # --------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Vector2DConverter:
   x_componant: float
   y_componant: float
@@ -74,7 +72,7 @@ class _Vector2DConverter:
 # -------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Vector2DProperties(_Vector2DConverter):
   x_componant: float
   y_componant: float
@@ -141,7 +139,7 @@ class _Vector2DProperties(_Vector2DConverter):
 # -------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class _Vector2DConstructor(_Vector2DProperties):
   x_componant: float
   y_componant: float
@@ -240,7 +238,7 @@ class _Vector2DConstructor(_Vector2DProperties):
 # -------------------------------------------------------------------------------------------------
 
 
-@define
+@dataclass
 class Vector2D(_Vector2DConstructor):
   """Class representing a two dimensional vector"""
   x_componant: float
