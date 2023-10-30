@@ -180,25 +180,13 @@ class _Vector2DConstructor(_Vector2DProperties):
     length: int = len(componants_list)
 
     if not length == 2:
-      raise InvalidConstructor(
-        f"""
-         Two many values in constructor call. \n
-         Excpected 2 values, got {length}.
-         """)
+      raise InvalidConstructor
 
     if not componants_list[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x componant {componants_list[0]}.
-         X componant must be a number.
-         """
-      )
+      raise InvalidConstructor
 
     if not componants_list[1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct vector from y componant {componants_list[1]}.
-         """)
+      raise InvalidConstructor
 
     return Vector2D(float(componants_list[0]), float(componants_list[1]))
 
@@ -213,20 +201,10 @@ class _Vector2DConstructor(_Vector2DProperties):
     """
 
     if not "x-componant" in componants:
-      raise InvalidConstructor(
-        f"""
-         Canot find value for x-componant. \n
-         Excpected 'x-componant' at position [0],
-         got {list(componants)[0]}
-         """)
+      raise InvalidConstructor
 
     if not "y-componant" in componants:
-      raise InvalidConstructor(
-        f"""
-         Cannot find value for y-componant. \n
-         Excpected 'y-componant' at position [-1],
-         got {list(componants)[-1]}
-         """)
+      raise InvalidConstructor
 
     return Vector2D(componants["x-componant"], componants["y-componant"])
 
@@ -245,7 +223,7 @@ class Vector2D(_Vector2DConstructor):
 
   def __post_init__(self) -> None:
     if not self.x_componant and not self.y_componant:
-      raise InvalidVector("Vector (0,0) does not exist.")
+      raise InvalidVector
 
     return super().__init__(self.x_componant, self.y_componant)
 

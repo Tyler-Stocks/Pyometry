@@ -220,11 +220,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
 
     if not length == 2:
-      raise InvalidConstructor(
-        f"""
-          Invalid amount of values provided in constructor. \n
-          Excpected 2, got {length}
-          """)
+      raise InvalidConstructor
 
     first_point: str = points_list[0]
 
@@ -241,18 +237,9 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     first_point_values: list[str] = first_point.split(":")
 
     if not first_point_values[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x-value {first_point_values[0]}.\n
-         X-Position must be a number.
-         """)
-
+      raise InvalidConstructor
     if not first_point_values[-1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from y-value {first_point_values[-1]}.\n
-         Y-Position must be a number.
-         """)
+      raise InvalidConstructor
 
     second_point: str = points_list[1]
 
@@ -267,19 +254,10 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     second_point_values: list[str] = second_point.split(":")
 
     if not second_point_values[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x-value {second_point_values[0]}.\n
-         X-Position must be a number.
-         """)
+      raise InvalidConstructor
 
     if not second_point_values[-1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from y-value {second_point_values[-1]}.\n
-         Y-Position must be a number.
-         """
-      )
+      raise InvalidConstructor
 
     start_point: Point2D = Point2D(
       float(first_point_values[0]),
@@ -291,12 +269,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     )
 
     if start_point == end_point:
-      raise InvalidConstructor(
-        f"""
-         To construct a line segment two distinct points must be provided.
-         Since {start_point} and {end_point} are not distinct
-         the line segment could not be constructed
-         """)
+      raise InvalidConstructor
 
     return LineSegment2D(start_point, end_point)
 
@@ -312,26 +285,13 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     """
 
     if not "start_point" in points:
-      raise InvalidConstructor(
-        f"""
-         Cannot find value for start_point.
-         Expected 'start-point' as the fist key, got {list(points)[0]}
-         """)
+      raise InvalidConstructor
 
     if not "end-point" in points:
-      raise InvalidConstructor(
-        f"""
-         Cannot find value for end_point.
-         Excpected 'end-point' as the first key, got {list(points)[-1]}
-         """)
+      raise InvalidConstructor
 
     if points["start-point"] == points["end-point"]:
-      raise InvalidConstructor(
-        f"""
-         To construct a line segment two distinct points must be provided.
-         Since {points['start-point']} and {points['end-point']} are not distinct
-         the line segment could not be constructed.
-         """)
+      raise InvalidConstructor
 
     return LineSegment2D(points["start-point"], points["end-point"])
 
@@ -346,12 +306,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     """
 
     if points[0] == points[1]:
-      raise InvalidConstructor(
-        f"""
-         To construct a line segment two distinct points must be provided.
-         Since {points[0]} and {points[1]} are not distinct the line segement
-         could not be constructed.
-         """)
+      raise InvalidConstructor
 
     return LineSegment2D(points[0], points[1])
 
@@ -371,10 +326,7 @@ class LineSegment2D(_LineSegment2DConstructor):
 
   def __post_init__(self) -> None:
     if self.start_point == self.end_point:
-      raise InvalidLineSegment(
-            """
-            Point-A and Point-B cannot be the same. Maybe you meant Point2D?
-            """)
+      raise InvalidLineSegment
 
     return super().__init__(self.start_point, self.end_point)
 

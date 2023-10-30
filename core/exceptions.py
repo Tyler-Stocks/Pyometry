@@ -19,7 +19,7 @@ class InvalidLineSegment(Exception):
     super().__init__("The constructed line segment is not possible.")
 
 
-class InvalidQuadrantError(Exception):
+class InvalidQuadrant(Exception):
   """This is an error for an invalid quadrant."""
 
   def __init__(self) -> None:

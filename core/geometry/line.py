@@ -227,11 +227,7 @@ class _Line2DConstructor(_Line2DProperties):
          {points} is not a valid format.
          """)
     if not length == 2:
-      raise InvalidConstructor(
-        f"""
-          Invalid amount of values provided in constructor. \n
-          Excpected 2, got {length}
-          """)
+      raise InvalidConstructor
 
     first_point: str = points_list[0]
 
@@ -247,18 +243,10 @@ class _Line2DConstructor(_Line2DProperties):
     first_point_values: list[str] = first_point.split(":")
 
     if not first_point_values[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x-value {first_point_values[0]}.\n
-         X-Position must be a number.
-         """)
+      raise InvalidConstructor
 
     if not first_point_values[-1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from y-value {first_point_values[-1]}.\n
-         Y-Position must be a number.
-         """)
+      raise InvalidConstructor
 
     second_point: str = points_list[1]
 
@@ -273,19 +261,9 @@ class _Line2DConstructor(_Line2DProperties):
     second_point_values: list[str] = second_point.split(":")
 
     if not second_point_values[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x-value {second_point_values[0]}.\n
-         X-Position must be a number.
-         """)
-
+      raise InvalidConstructor
     if not second_point_values[-1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from y-value {second_point_values[-1]}.\n
-         Y-Position must be a number.
-         """
-      )
+      raise InvalidConstructor
 
     start_point: Point2D = Point2D(
       float(first_point_values[0]),
@@ -308,27 +286,11 @@ class _Line2DConstructor(_Line2DProperties):
       * point: A dictionary representing the Line in the form
         {"Point-A": Point2D, "Point-B": Point2D}
     """
-    if not "Point-A" in points:
-      raise InvalidConstructor(
-        """
-        Point-A was not found in the constructor.
-        Please include Point-A to construct a line from a dict.
-        """)
-
-    if not "Point-B" in points:
-      raise InvalidConstructor(
-        """
-        Point-B was not found in the constructor.
-        Please include Point-B to construct a line from a dict.
-        """)
+    if not "Point-A" in points or not "Point-B" in points:
+      raise InvalidConstructor
 
     if points["Point-A"] == points["Point-B"]:
-      raise InvalidConstructor(
-        f"""
-         To construct a Line2D two distinct points must be provided.
-         Since {points['Point-A']} and {points['Point-B']} are not distinct
-         the line could not be constructed
-         """)
+      raise InvalidConstructor
 
     return Line2D(points["Point-A"], points["Point-B"])
 
@@ -346,11 +308,7 @@ class _Line2DConstructor(_Line2DProperties):
     """
 
     if points[0] == points[1]:
-      raise InvalidConstructor(
-        f"""
-         To construct a Line2D two distinct points must be provided.
-         Since {points[0]} and {points[1]} are not distinct the line could not be constructed
-         """)
+      raise InvalidConstructor
 
     return Line2D(points[0], points[1])
 

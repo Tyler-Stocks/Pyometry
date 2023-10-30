@@ -147,18 +147,10 @@ class _Point2DConstructor(_PointProperties):
     position_list: list[str] = position.split(",")
 
     if not position_list[0].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from x value {position_list[0]}. \n
-         X position must be a number.
-         """)
+      raise InvalidConstructor
 
     if not position_list[1].isnumeric():
-      raise InvalidConstructor(
-        f"""
-         Cannot construct point from y value {position_list[0]}. \n
-         Y position must be a number.
-         """)
+      raise InvalidConstructor
 
     return Point2D(float(position_list[0]), float(position_list[1]))
 
@@ -173,20 +165,10 @@ class _Point2DConstructor(_PointProperties):
     """
 
     if not "x-position" in position:
-      raise InvalidConstructor(
-        f"""
-         Cannot find value for x-position. \n
-         Expected value 'x-position' as the first key,
-         Got {list(position)[0]}
-         """)
+      raise InvalidConstructor
 
     if not "y-position" in position:
-      raise InvalidConstructor(
-        f"""
-         Cannot find value for y-position. \n
-         Excpected value 'x-position' as the first key,
-         Got {list(position)[-1]}
-         """)
+      raise InvalidConstructor
 
     return Point2D(position["x-position"], position["y-position"])
 
