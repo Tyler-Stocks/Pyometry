@@ -29,9 +29,9 @@ class _Line2DConverter:
     Convert a Line2D to a string.
 
     ### Return
-    Returns a string representation of a line in the form:\n
-    Point-A X: {value}, Point-B X: {value}\n
-    Point-B X: {value}, Point-B X: {value}\n
+      Returns a string representation of a line in the form:\n
+        Point-A X: {value}, Point-B X: {value}\n
+        Point-B X: {value}, Point-B X: {value}\n
     """
     return f"""Point-A X: {self.point_a.x}, Point-A Y: {self.point_a.y}
 Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
@@ -42,7 +42,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a list of Point2D's
 
     ### Return
-    Returns a list in the form [Point-A, Point-B]
+      Returns a list in the form [Point-A, Point-B]
     """
     return [self.point_a, self.point_b]
 
@@ -52,7 +52,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a dict of Point2D's
 
     ### Return
-    Returns a dict in the form {"Point-A": [value], "Point-B" [value]}
+      Returns a dict in the form {"Point-A": [value], "Point-B" [value]}
     """
 
     return {"Point-A": self.point_a, "Point-B": self.point_b}
@@ -62,7 +62,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a tuple of Point2D's
 
     ### Return
-    Returns a tuple in the form (Point-A, Point-B)
+      Returns a tuple in the form (Point-A, Point-B)
     """
 
     return self.point_a, self.point_b
@@ -95,16 +95,13 @@ class _Line2DProperties(_Line2DConverter):
      * return_type -> The type of return that you would like.
 
     ### Return
-    Returns the vertical distance between two whole number points on the line.
+      Returns the vertical distance between two whole number points on the line.
     """
     rise: float = self.point_a.y - self.point_b.y
 
-    match return_type:
-      case "Float":
-        return rise
-      case "Fraction":
-        return Fraction(rise)
-
+    if return_type == "Float":
+      return rise
+    return Fraction(rise)
 
   def run(
       self,
@@ -114,12 +111,10 @@ class _Line2DProperties(_Line2DConverter):
     Returns the run of the line.
 
     ### Parameters
-
-    * return_type => The return type you would like
+      * return_type => The return type you would like
 
     ### Return
-
-    Returns the horizontal distance between two whole number points on the line
+      Returns the horizontal distance between two whole number points on the line
     """
     run: float = self.point_a.x_position - self.point_b.x_position
 
@@ -138,16 +133,14 @@ class _Line2DProperties(_Line2DConverter):
     Returns the slope of the line.
 
     ### Parameters
-
-    * return_type => defines the return type of the function either Fraction or Float.
+      * return_type => defines the return type of the function either Fraction or Float.
 
     ### Returns
-
-    Returns the steepness of the line
+      Returns the steepness of the line
     """
 
     if self.run("Float") == 0:
-      return Undefined.UNDEFINED
+      return Undefined()
 
     slope: float | Fraction = self.rise("Float") / self.run("Float")
 
@@ -166,17 +159,15 @@ class _Line2DProperties(_Line2DConverter):
       return self.point_a
     elif not self.point_b.y:
       return self.point_b
-
-    slope: float | Undefined | Fraction = self.slope("Float")
-
-    if slope is Undefined.UNDEFINED:
-      return Point2D(self.point_a.x_position, 0)
     else:
-      x_intercept_value: float = (
-        self.point_b.x -
-        (self.point_b.y / slope))
+      slope: float | Undefined | Fraction = self.slope("Float")
 
-    return Point2D(x_intercept_value, 0)
+      if slope is Undefined:
+        return Point2D(self.point_a.x_position, 0)
+      else:
+        x_intercept_value: float | Undefined = self.point_b.x - (self.point_b.y / slope)
+
+      return Point2D(float(x_intercept_value), 0)
 
 
   @property
@@ -187,18 +178,18 @@ class _Line2DProperties(_Line2DConverter):
       return self.point_a
     elif self.point_b.x_position == 0:
       return self.point_b
-
-    slope: float | Undefined | Fraction = self.slope("Float")
-
-    if slope is Undefined.UNDEFINED:
-      return Point2D(self.point_a.x_position, 0)
     else:
-      y_intercept_value: float = (
-        self.point_b.y -
-        (self.point_b.x / slope)
-      )
+      slope: float | Undefined | Fraction = self.slope("Float")
 
-    return Point2D(0, y_intercept_value)
+      if slope is Undefined:
+        return Point2D(self.point_a.x_position, 0)
+      else:
+        y_intercept_value: float | Undefined = (
+          self.point_b.y -
+          (self.point_b.x / slope)
+        )
+
+      return Point2D(0, float(y_intercept_value))
 
 
 # -----------------------------------------------------------------------------
@@ -216,13 +207,12 @@ class _Line2DConstructor(_Line2DProperties):
     super().__init__(self.point_a, self.point_b)
 
   @classmethod
-  def from_str(cls, points: str) -> _Line2DConstructor:
+  def from_str(cls, points: str) -> Line2D:
     """
     Constructs a line segment 2D from a str.
 
     ### Parameters
-
-    * points => A string representation of a line in the form x:y,x:y
+      * points => A string representation of a line in the form x:y,x:y
     """
 
     points_list: list[str] = points.split(",")
@@ -306,17 +296,17 @@ class _Line2DConstructor(_Line2DProperties):
       float(second_point_values[-1])
     )
 
-    return cls(start_point, end_point)
+    return Line2D(start_point, end_point)
 
 
   @classmethod
-  def from_dict(cls, points: dict[str, Point2D]) -> _Line2DConstructor:
+  def from_dict(cls, points: dict[str, Point2D]) -> Line2D:
     """
     Constructs a line from a dictionary.
 
     ### Parameters
-    * point: A dictionary representing the Line in the form
-      {"Point-A": Point2D, "Point-B": Point2D}
+      * point: A dictionary representing the Line in the form
+        {"Point-A": Point2D, "Point-B": Point2D}
     """
     if not "Point-A" in points:
       raise InvalidConstructor(
@@ -340,20 +330,19 @@ class _Line2DConstructor(_Line2DProperties):
          the line could not be constructed
          """)
 
-    return cls(points["Point-A"], points["Point-B"])
+    return Line2D(points["Point-A"], points["Point-B"])
 
 
   @classmethod
-  def from_tuple(cls, points: tuple[Point2D, Point2D]) -> _Line2DConstructor:
+  def from_tuple(cls, points: tuple[Point2D, Point2D]) -> Line2D:
     """
     Constructs a Line2D from a tuple of Point2D
 
     ### Params
-    * points => The points you would like to construct the line from.
+      * points => The points you would like to construct the line from.
 
     ### Note
-
-    If you try to pass in two points with the same position the function will raise an error.
+      If you try to pass in two points with the same position the function will raise an error.
     """
 
     if points[0] == points[1]:
@@ -363,7 +352,7 @@ class _Line2DConstructor(_Line2DProperties):
          Since {points[0]} and {points[1]} are not distinct the line could not be constructed
          """)
 
-    return cls(points[0], points[1])
+    return Line2D(points[0], points[1])
 
 
 # -----------------------------------------------------------------------------
@@ -384,17 +373,9 @@ class Line2D(_Line2DConstructor):
     """
     Returns whether or not two lines are perpendicular.
 
-    Parameters
-    ----------
-    other: Line2D = The line that you are comparing against.
+    ### Parameters
+      * other => The line that you are comparing against.
     """
-    if not other.__class__ == Line2D:
-      raise NotImplementedError(
-        f"""
-         Cannot perform comparison is_perpendicular on classes
-         {self.__class__.__name__} and {other.__class__.__name__}.\n
-         They are incompatible.
-         """)
 
     if self.slope("Float") is Undefined and other.slope("Float") == 0:
       return True
@@ -411,16 +392,8 @@ class Line2D(_Line2DConstructor):
     """
     Returns whether or not two lines are parallel.
 
-    Parameters
-    ----------
-    other: Line2D = The line that you are comparing against.
+    ### Parameters
+      * other => The line that you are comparing against.
     """
-    if not other.__class__ == Line2D:
-      raise NotImplementedError(
-        f"""
-         Cannot perform comparioson is_parallel on classes
-         {self.__class__.__name__} and {other.__class__.__name__}.\n
-         They are incompatible.
-         """)
 
     return self.slope("Float") == other.slope("Float")

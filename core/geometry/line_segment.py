@@ -94,43 +94,37 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
     Returns the run of the line as a float.
 
     ### Parameters
-    * return_type: Literal["Fraction"] | Literal["Float"] \n
-      defines the return type of the function either Fraction or Float.
+      * return_type => defines the return type of the function either Fraction or Float.
 
     ### Return
-    Returns the horizontal distance between whole number points on the line segment.
-
+      Returns the horizontal distance between whole number points on the line segment.
     """
     run: float | Fraction = round((self.start_point.x - self.end_point.x) ** 2, precision)
 
     if return_type == "Fraction":
-      run = Fraction(run)
-
+      return Fraction(run)
     return run
 
 
   def rise(
       self,
-      return_type:
-        Literal["Float"] | Literal["Fraction"] = "Float",
-      prescision:
-        SupportsIndex = 0
+      return_type: Literal["Float"] | Literal["Fraction"] = "Float",
+      prescision: SupportsIndex = 0
   ) -> float | Fraction:
     """
     Returns the rise of the line as a float.
 
     ### Parameters
-    * return_type: Literal["Fraction"] | Literal["Float"]
-      defines the return type of the function either Fraction or Float.
+      * return_type: Literal["Fraction"] | Literal["Float"]
+        defines the return type of the function either Fraction or Float.
 
     ### Return
-    Returns the vertical distance between whole number points on the line segment
+      Returns the vertical distance between whole number points on the line segment
     """
     rise: float | Fraction = round((self.start_point.y - self.end_point.y) ** 2, prescision)
 
     if return_type == "Fraction":
-      rise = Fraction(rise)
-
+      return Fraction(rise)
     return rise
 
 
@@ -139,10 +133,10 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
     Calculates the length of the line segment
 
     ### Parameters
-    * precision => How precise you would like the calculation to be.
+      * precision => How precise you would like the calculation to be.
 
     ### Return
-    Returns the length of the line segment
+      Returns the length of the line segment
     """
     return sqrt(self.run(precision=precision) ** 2 + self.rise(prescision=precision) ** 2)
 
@@ -150,28 +144,26 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
   def slope(
       self,
       return_type: Literal["Float"] | Literal["Fraction"] = "Float",
-      precision:
-        SupportsIndex = 3
+      precision: SupportsIndex = 3
     ) -> float | Undefined | Fraction:
     """
     Calculates the slope of a line segment
 
     ### Parameters
-    * return_type => The return type you would like, defaults to a decimal
-    * precision   => How precise you would like the calculation to be
+      * return_type => The return type you would like, defaults to a decimal
+      * precision   => How precise you would like the calculation to be
 
     ### Return
-    Returns A float or fraction if possible, if the line is vertical returns Undefined.
+      Returns A float or fraction if possible, if the line is vertical returns Undefined.
     """
 
     if not self.run():
-      return Undefined.UNDEFINED
+      return Undefined()
 
     slope: float | Fraction = self.rise(prescision=precision) / self.run(precision=precision)
 
     if return_type == "Fraction":
-      slope = Fraction(slope)
-
+      return Fraction(slope)
     return slope
 
 
@@ -191,24 +183,24 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
 
   @classmethod
-  def from_tuple(cls, points: tuple[Point2D, Point2D]) -> _LineSegment2DConstructor:
+  def from_tuple(cls, points: tuple[Point2D, Point2D]) -> LineSegment2D:
     """
     Constructs a line from a tuple of point.
 
     ### Parameters
-    * points => The start and end point of a line segment (start_point, end_point)
+      * points => The start and end point of a line segment (start_point, end_point)
     """
 
-    return cls(points[0], points[1])
+    return LineSegment2D(points[0], points[1])
 
 
   @classmethod
-  def from_str(cls, points: str) -> _LineSegment2DConstructor:
+  def from_str(cls, points: str) -> LineSegment2D:
     """
     Constructs a line from a string.
 
     ### Parameters
-    * points => The start and end points of a line segment in the form:
+      * points => The start and end points of a line segment in the form:
         "start_point(x:y),end-point(x:y)"
     """
 
@@ -306,16 +298,16 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
          the line segment could not be constructed
          """)
 
-    return cls(start_point, end_point)
+    return LineSegment2D(start_point, end_point)
 
 
   @classmethod
-  def from_dict(cls, points: dict[str, Point2D]) -> _LineSegment2DConstructor:
+  def from_dict(cls, points: dict[str, Point2D]) -> LineSegment2D:
     """
     Constructs a line from a dictionary.
 
     ### Parameters
-    * points => The start and end points of the line segment
+      * points => The start and end points of the line segment
         {"start_point": Point2D, "end_point}: "Point2D
     """
 
@@ -341,16 +333,16 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
          the line segment could not be constructed.
          """)
 
-    return cls(points["start-point"], points["end-point"])
+    return LineSegment2D(points["start-point"], points["end-point"])
 
 
   @classmethod
-  def from_list(cls, points: list[Point2D]) -> _LineSegment2DConstructor:
+  def from_list(cls, points: list[Point2D]) -> LineSegment2D:
     """
     Constructs a line segment from a list.
 
     ### Parameters
-    * points => The points you would like to convert into a line
+      * points => The points you would like to convert into a line
     """
 
     if points[0] == points[1]:
@@ -361,7 +353,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
          could not be constructed.
          """)
 
-    return cls(points[0], points[1])
+    return LineSegment2D(points[0], points[1])
 
 
 # -----------------------------------------------------------------------------
@@ -370,7 +362,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
 
 @dataclass
-class LineSegment2D(_LineSegment2DProperties):
+class LineSegment2D(_LineSegment2DConstructor):
   """
   Class representing a Line Segment in 2D space.
   """
@@ -391,9 +383,8 @@ class LineSegment2D(_LineSegment2DProperties):
     """
     Checks if a point is along the line segment.
 
-    Parameters
-    ----------
-    point: Point2D = The point you are checking is along a line.
+    ### Parameters
+      point => The point you are checking is along a line.
     """
 
     is_between: bool = bool(
@@ -408,9 +399,8 @@ class LineSegment2D(_LineSegment2DProperties):
     """
     Translates the line along the x axis.
 
-    Parameters
-    ----------
-    translation: float = The distance to translate the line segment.
+    ### Parameters
+    translation => The distance to translate the line segment.
     """
 
     self.start_point.x += translation
@@ -421,9 +411,8 @@ class LineSegment2D(_LineSegment2DProperties):
     """
     Translates the line along the y axis.
 
-    Parameters
-    ----------
-    translation: float = The distance to translate the line segment.
+    ### Parameters
+    translation => The distance to translate the line segment.
     """
 
     self.start_point.y += translation
@@ -436,8 +425,8 @@ class LineSegment2D(_LineSegment2DProperties):
 
     Parameters
     ----------
-    x_translation: float = The distance to translate horizontally.\n
-    y_translation: float = The distance to translate vertically.\n
+    x_translation => The distance to translate horizontally.
+    y_translation => The distance to translate vertically.
     """
 
     self.translate_x(x_translation)
@@ -464,7 +453,7 @@ class LineSegment2D(_LineSegment2DProperties):
   def is_perpendicular(self, line: LineSegment2D) -> bool:
     """Checks to see if a line segment is perpendicular"""
     if not self.slope("Float") is Undefined or line.slope("Float") is Undefined:
-      return self.slope("Float") == 1 / float(line.slope("Float"))
+      return self.slope("Float") == 1 / line.slope()
 
     if self.slope("Float") is Undefined and line.slope("Float") is Undefined:
       return False
