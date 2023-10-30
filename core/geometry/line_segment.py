@@ -318,9 +318,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
 @dataclass
 class LineSegment2D(_LineSegment2DConstructor):
-  """
-  Class representing a Line Segment in 2D space.
-  """
+  """Class representing a Line Segment in 2D space."""
   start_point: Point2D
   end_point: Point2D
 

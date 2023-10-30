@@ -232,11 +232,6 @@ class Vector2D(_Vector2DConstructor):
     self,
     addend: Vector2D
   ) -> Vector2D:
-    if not addend.__class__ is Vector2D:
-      raise NotImplementedError(
-          f"""
-           Cannot perform operation __add__ on {type(addend)}
-           """)
 
     sum_of_x_componants: float = self.x_componant + addend.x_componant
     sum_of_y_componants: float = self.y_componant + addend.y_componant
@@ -254,11 +249,6 @@ class Vector2D(_Vector2DConstructor):
     self,
     subtrahend: Vector2D
   ) -> Vector2D:
-    if not subtrahend.__class__ is Vector2D:
-      raise NotImplementedError(
-        f"""
-          Cannot perform operation __sub__ on {type(subtrahend)}
-          """)
     sum_of_x_componants: float = self.x_componant + subtrahend.x_componant
     sum_of_y_componants: float = self.y_componant + subtrahend.y_componant
     return Vector2D(sum_of_x_componants, sum_of_y_componants)
@@ -275,10 +265,6 @@ class Vector2D(_Vector2DConstructor):
       self,
       scalar: float
   ) -> Vector2D:
-    if not scalar.__class__ == float:
-      raise NotImplementedError(
-        f"""Cannot perform operation __mul__ on {type(scalar)}
-         """)
     prod_of_x_componants: float = self.x_componant * scalar
     prod_of_y_componants: float = self.y_componant * scalar
     return Vector2D(prod_of_x_componants, prod_of_y_componants)
@@ -295,11 +281,6 @@ class Vector2D(_Vector2DConstructor):
       self,
       scalar: float
     ) -> Vector2D:
-    if not scalar.__class__ == float:
-      raise NotImplementedError(
-        f"""
-         Cannot perform operation __div__ on {type(scalar)}
-         """)
     div_of_x_componants: float = self.x_componant / scalar
     div_of_y_componants: float = self.y_componant / scalar
     return Vector2D(div_of_x_componants, div_of_y_componants)
@@ -316,15 +297,9 @@ class Vector2D(_Vector2DConstructor):
     """
     Rotates the vector around the origin.
 
-    Parameters
-    ----------
-    rotation: float = The angle of rotation
-    angle_unit: AngleUnit = The angle unit to use (DEG/RAD)
-    Description
-    -----------
-    Rotatest the vector around the origin through the following formula:
-      x componant = cos(rotation * x componant) - sin(rotation * y componant) \n
-      y componant = sin(rotation * x componant) - cos(rotation * y componant)
+    ### Parameters
+      * rotation   => The angle of rotation
+      * angle_unit => The angle unit to use (DEG/RAD)
     """
 
     if angle_type is AngleUnit.RAD:
