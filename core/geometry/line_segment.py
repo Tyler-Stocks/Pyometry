@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 # Internal
 from core.geometry.point import Point2D
+from core.geometry.line  import Line2D
 from core.util.undefined import Undefined
 from core.util.orientation import Orientation
 from core.exceptions import InvalidLineSegment, FormatError, InvalidConstructor
@@ -25,7 +26,7 @@ from core.exceptions import InvalidLineSegment, FormatError, InvalidConstructor
 
 @dataclass(order = True)
 class _LineSegment2DConverter:
-  """Internal Implementation detail, do not use."""
+  """Internal Implementation detail of LineSegment2D"""
   start_point: Point2D
   end_point:   Point2D
 
@@ -174,7 +175,7 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 
 @dataclass(order = True)
 class _LineSegment2DConstructor(_LineSegment2DProperties):
-  """ Do not use. """
+  """Internal Implementation Detail Of LineSegment2D"""
   start_point: Point2D
   end_point: Point2D
 
@@ -408,7 +409,7 @@ class LineSegment2D(_LineSegment2DConstructor):
     self.end_point.mirror_y_axis()
 
 
-  def is_parallel(self, line: LineSegment2D) -> bool:
+  def is_parallel(self, line: LineSegment2D | Line2D) -> bool:
     """
     Checks to see if a line segment is parallel.
 
@@ -421,7 +422,7 @@ class LineSegment2D(_LineSegment2DConstructor):
     return self.slope("Float") == line.slope("Float")
 
 
-  def is_perpendicular(self, line: LineSegment2D) -> bool:
+  def is_perpendicular(self, line: LineSegment2D | Line2D) -> bool:
     """
     Checks to see if a line segment is perpendicular
 
@@ -429,7 +430,7 @@ class LineSegment2D(_LineSegment2DConstructor):
       * line => The line to be checked
     """
     if not self.slope("Float") is Undefined or line.slope("Float") is Undefined:
-      return self.slope("Float") == 1 / line.slope()
+      return self.slope("Float") == 1 / line.slope("Float")
 
     if self.slope("Float") is Undefined and line.slope("Float") is Undefined:
       return False

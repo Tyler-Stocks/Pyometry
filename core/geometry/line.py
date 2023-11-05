@@ -98,7 +98,7 @@ class _Line2DProperties(_Line2DConverter):
     ### Return
       The horizontal distance between two whole number points on the line
     """
-    run: float = self.point_a.x_position - self.point_b.x_position
+    run: float = self.point_a.x - self.point_b.x
 
     match return_type:
       case "Float":
@@ -150,7 +150,7 @@ class _Line2DProperties(_Line2DConverter):
       slope: float | Undefined | Fraction = self.slope("Float")
 
       if slope is Undefined:
-        return Point2D(self.point_a.x_position, 0)
+        return Point2D(self.point_a.x, 0)
       else:
         x_intercept_value: float | Undefined = self.point_b.x - (self.point_b.y / slope)
 
@@ -166,15 +166,15 @@ class _Line2DProperties(_Line2DConverter):
       The point where the line crosses the y-axis({intercept}, 0)
     """
 
-    if not self.point_a.x_position:
+    if not self.point_a.x:
       return self.point_a
-    elif not self.point_b.x_position:
+    elif not self.point_b.x:
       return self.point_b
     else:
       slope: float | Undefined | Fraction = self.slope("Float")
 
       if slope is Undefined:
-        return Point2D(self.point_a.x_position, 0)
+        return Point2D(self.point_a.x, 0)
       else:
         y_intercept_value: float | Undefined = (
           self.point_b.y -

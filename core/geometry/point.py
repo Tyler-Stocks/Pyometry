@@ -6,6 +6,8 @@ from __future__ import annotations
 
 # Standard Imports
 from math import sqrt, pi, sin, cos
+from typing import Literal
+from fractions import Fraction
 from dataclasses import dataclass
 
 # Internal Imports
@@ -22,6 +24,7 @@ from core.exceptions import FormatError, InvalidConstructor
 
 @dataclass(order = True)
 class _Point2DConverter:
+  """Internal Implementation Detail of Point2D"""
   x: float
   y: float
 
@@ -30,7 +33,7 @@ class _Point2DConverter:
     Converts a Point2D into a tuple of floats
 
     ### Return
-      Returns the point as tuple in the form (x, y)
+      The point as tuple in the form (x, y)
     """
     return self.x, self.y
 
@@ -39,9 +42,20 @@ class _Point2DConverter:
     Converts a Point2D into a dict of floats
 
     ### Return
-      Returns the point as a dict in the form {"x": {value}, "y": {value}}
+      The point as a dict in the form {"x": {value}, "y": {value}}
     """
     return {"x": self.x, "y": self.y}
+
+
+  def to_list(self) -> list[float]:
+    """
+    Converts a Point2D into a list of floats
+
+    ### Return
+      The point as a list in the form [x, y]
+    """
+
+    return [self.x, self.y]
 
 
 # -------------------------------------------------------------------------------------------------
@@ -51,7 +65,7 @@ class _Point2DConverter:
 
 @dataclass(order = True)
 class _PointProperties(_Point2DConverter):
-  """_"""
+  """Internal Implementation Detail of Point2D"""
   x: float
   y: float
 
@@ -60,20 +74,13 @@ class _PointProperties(_Point2DConverter):
 
 
   @property
-  def x_position(self) -> float:
-    """Returns the x position as a float."""
-    return self.x
-
-
-  @property
-  def position(self) -> tuple[float, float]:
-    """Gets the position of the point."""
-    return self.x, self.y
-
-
-  @property
   def quadrant(self) -> Quadrant:
-    """Returns the quadrant that a point is in."""
+    """
+    Calculates the quadrant that the point is in
+
+    ### Return
+      The quadrant that the point is in
+    """
     if not self.x and not self.y:
       return Quadrant.ORIGIN
     elif self.x > 0:
@@ -83,13 +90,23 @@ class _PointProperties(_Point2DConverter):
 
   @property
   def distance_from_origin(self) -> float:
-    """Returns the distance from the origin as a float."""
+    """
+    Calculates the distance from the point to the origin (0, 0)
+
+    ### Return
+      The distance between the point and the origin
+    """
     return sqrt(self.x ** 2 + self.y ** 2)
 
 
   @property
   def is_at_origin(self) -> bool:
-    """Checks to see if a point is at the origin."""
+    """
+    Calculates whether the point is at the origin (0,0)
+
+    ### Return
+      Whether or not the point is at the origin
+    """
     return not self.x and not self.y
 
 
@@ -100,7 +117,7 @@ class _PointProperties(_Point2DConverter):
 
 @dataclass(order = True)
 class _Point2DConstructor(_PointProperties):
-  """A class representing a single point in 2d space."""
+  """Internal Implementation Detail Of Point2D"""
   x: float
   y: float
 
@@ -114,6 +131,9 @@ class _Point2DConstructor(_PointProperties):
 
     ### Parameters
       * position => The position of the point (x,y).
+
+    ### Return
+      A Point2D constructed from the supplied tuple
     """
     return Point2D(position[0], position[1])
 
@@ -125,6 +145,9 @@ class _Point2DConstructor(_PointProperties):
 
     ### Parameters
       * position => The position of the point 'x,y'
+
+    ### Return
+      A Point2D constructed from the supplied string
     """
 
     if not "," in position:
@@ -153,6 +176,9 @@ class _Point2DConstructor(_PointProperties):
 
     ### Parameters
       * position => The position of the point {"x-position": value, "y-position": value}
+
+    ### Return
+      A Point2D constructed from the supplied dictionary
     """
 
     if not "x-position" in position:
@@ -209,32 +235,51 @@ class Point2D(_Point2DConstructor):
     self.y += translation_y
 
 
-  def get_vertical_distance(self, other: Point2D) -> float:
+  def get_vertical_distance(
+    self,
+    other: Point2D,
+    return_type: Literal["Float"] | Literal["Fraction"] = "Float"
+  ) -> float | Fraction:
     """
     Returns the vertical distance between two points.
 
     ### Parameters
-      * other: Point2D = The point you are trying to find the distance to.
+      * other => The point you are trying to find the distance to.
+      * return_type => The return type of the function
 
     ### Return
-      Returns the vertical distance between self and other.
+      The vertical distance between self and other.
     """
 
     v_dist: float = self.x - other.x
+
+    if return_type == "Fraction":
+      return Fraction(v_dist)
+
     return v_dist
 
 
-  def get_horizontal_distance(self, other: Point2D) -> float:
+  def get_horizontal_distance(
+    self,
+    other: Point2D,
+    return_type: Literal["Float"] | Literal["Fraction"] = "Float"
+  ) -> float | Fraction:
     """
     Returns the horizontal distance between two points.
 
     ### Parameters
-      * other: Point2D = The point you are getting the distance too.
+      * other => The point you are getting the distance too.
+      * return_type => The return type of the function
 
     ### Return
-      Returns the horizontal distance between self and other
+      The horizontal distance between self and other
     """
-    return self.y - other.y
+    h_dist: float = self.y - other.y
+
+    if return_type == "Fraction":
+      return Fraction(h_dist)
+
+    return h_dist
 
 
   def get_distance_between_points(self, other: Point2D) -> float:
@@ -298,13 +343,11 @@ class Point2D(_Point2DConstructor):
     """
     Rotates a point about another point.
 
-    Parameters
-    ----------
-
-    other: Point2D = The point you are rotating about.\n
-    angle_of_rot: float = The angle of rotation about the other point.\n
-    angle_type: AngleType: The angle unit (Deg/Rad) \n
-    direction: RotationalDirection: The direction of rotation.
+    ### Parameters
+      * other => The point you are rotating about.
+      * angle_of_rot => The angle of rotation about the other point.
+      angle_type => The angle unit (Deg/Rad)
+      direction => The direction of rotation.
     """
     if angle_unit is AngleUnit.RAD:
       angle_of_rot *= (180 / pi)
@@ -348,7 +391,17 @@ class Point2D(_Point2DConstructor):
     point_2: Point2D,
     point_3: Point2D
   ) -> Orientation:
-    """Gets the orientation of three points."""
+    """
+    Gets the orientation of three points.
+
+    ### Parameters
+      * point_1 => The first point
+      * point_2 => The second point
+      * point_3 => The third point
+
+    ### Return
+      The orientation of the points
+    """
     orientation = (
       ((point_2.y - point_1.y) * (point_3.x - point_2.x)) -
       ((point_2.x - point_1.x) * (point_3.y - point_2.y))
