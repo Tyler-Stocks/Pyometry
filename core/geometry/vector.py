@@ -23,8 +23,8 @@ from core.exceptions import InvalidVector, FormatError, InvalidConstructor
 
 @dataclass
 class _Vector2DConverter:
-  x_componant: float
-  y_componant: float
+  x: float
+  y: float
 
 
   def to_str(self) -> str:
@@ -32,9 +32,9 @@ class _Vector2DConverter:
     Converts a Vector2D into a string
 
     ### Return
-      Returns a string in the form "x-componant: {value}, y-componant: {value}"
+      A string in the form {x: [value], y: [value]}
     """
-    return f"x-componant: {self.x_componant}, y-componant: {self.y_componant}"
+    return f"x: {self.x}, y: {self.y}"
 
 
   def to_tuple(self) -> tuple[float, float]:
@@ -42,27 +42,27 @@ class _Vector2DConverter:
     Converts a Vector2D into a tuple of floats
 
     ### Return
-      Returns a tuple in the form (x-component, y-component)
+      A tuple in the form (x, y)
     """
-    return self.x_componant, self.y_componant
+    return self.x, self.y
 
   def to_dict(self) -> dict[str, float]:
     """
     Converts a Vector2D into a tuple of floats
 
     ### Return
-      Returns a dict in the form {"x-component": {value}, "y-component": {value}}
+      A dict in the form {"x": {value}, "y": {value}}
     """
-    return {"x-component": self.x_componant, "y-component": self.y_componant}
+    return {"x-component": self.x, "y-component": self.y}
 
   def to_list(self) -> list[float]:
     """
     Converts a Vector2D into a list of floats
 
     ### Return
-      Returns a list in the form [x-component, y-component]
+      A list in the form [x, y]
     """
-    return [self.x_componant, self.y_componant]
+    return [self.x, self.y]
 
 
 # -------------------------------------------------------------------------------------------------
@@ -72,11 +72,11 @@ class _Vector2DConverter:
 
 @dataclass
 class _Vector2DProperties(_Vector2DConverter):
-  x_componant: float
-  y_componant: float
+  x: float
+  y: float
 
   def __post_init__(self) -> None:
-    return super().__init__(self.x_componant, self.y_componant)
+    return super().__init__(self.x, self.y)
 
   @property
   def quadrant(self) -> Quadrant:
@@ -84,14 +84,14 @@ class _Vector2DProperties(_Vector2DConverter):
     Calculates the quadrant of the vector.
 
     ### Return
-      Returns the quadrant that the vector is in.
+      The quadrant the vector is in
     """
-    if not self.x_componant or not self.y_componant:
+    if not self.x or not self.y:
       return Quadrant.NONE
 
-    if self.x_componant > 0:
-      return Quadrant.ONE if self.y_componant > 0 else Quadrant.FOUR
-    return Quadrant.TWO if self.y_componant > 0 else Quadrant.THREE
+    if self.x > 0:
+      return Quadrant.ONE if self.y > 0 else Quadrant.FOUR
+    return Quadrant.TWO if self.y > 0 else Quadrant.THREE
 
 
   @property
@@ -100,19 +100,19 @@ class _Vector2DProperties(_Vector2DConverter):
     Calculates the direction of the vector.
 
     ### Return
-      Returns the direction of the vector
+      The direction of the vector
     """
 
-    if not self.x_componant and self.y_componant < 0:
+    if not self.x and self.y < 0:
       direction = 90.00
-    elif not self.x_componant and self.y_componant > 0:
+    elif not self.x and self.y > 0:
       direction = -90.00
-    elif not self.y_componant and self.x_componant < 0:
+    elif not self.y and self.x < 0:
       direction = 90.00
-    elif not self.y_componant and self.x_componant > 0:
+    elif not self.y and self.x > 0:
       direction = -90.00
 
-    direction = atan(self.x_componant / self.y_componant)
+    direction = atan(self.x / self.y)
 
     if self.quadrant in (Quadrant.TWO, Quadrant.THREE):
       direction += 180
@@ -127,9 +127,9 @@ class _Vector2DProperties(_Vector2DConverter):
     Calculates the magnitude of the vector.
 
     ### Return
-      Returns the magnitue of the vector
+      The magnitude of the vector
     """
-    return sqrt(self.x_componant ** 2 + self.y_componant ** 2)
+    return sqrt(self.x ** 2 + self.y ** 2)
 
 
 # -------------------------------------------------------------------------------------------------
@@ -139,11 +139,11 @@ class _Vector2DProperties(_Vector2DConverter):
 
 @dataclass
 class _Vector2DConstructor(_Vector2DProperties):
-  x_componant: float
-  y_componant: float
+  x: float
+  y: float
 
   def __post_init__(self) -> None:
-    return super().__init__(self.x_componant, self.y_componant)
+    return super().__init__(self.x, self.y)
 
   @classmethod
   def from_tuple(cls, componants: tuple[float, float]) -> Vector2D:
@@ -152,6 +152,9 @@ class _Vector2DConstructor(_Vector2DProperties):
 
     ### Parameters
       * componants => The x and y componants of the vector in form (x-componant, y_componant)
+
+    ### Return
+      A Vector2D constructed from the supplied tuple
     """
 
     return Vector2D(componants[0], componants[1])
@@ -164,6 +167,9 @@ class _Vector2DConstructor(_Vector2DProperties):
 
     ### Parameters
       * componants => The componants in the form "x-componant,y-componant"
+
+    ### Return
+      A Vector2D constructed form the supplied string
     """
 
     if not "," in componants:
@@ -196,8 +202,11 @@ class _Vector2DConstructor(_Vector2DProperties):
     """
     Constructs Vector2D from a dictionary.
 
-    ###Parameters
+    ### Parameters
       * componants = The componants of the vector {"x-componant": value, "y-componant": value}
+
+    ### Return
+      A Vector2D constructed from the supplied dictionary
     """
 
     if not "x-componant" in componants:
@@ -217,79 +226,48 @@ class _Vector2DConstructor(_Vector2DProperties):
 @dataclass
 class Vector2D(_Vector2DConstructor):
   """Class representing a two dimensional vector"""
-  x_componant: float
-  y_componant: float
+  x: float
+  y: float
 
 
   def __post_init__(self) -> None:
-    if not self.x_componant and not self.y_componant:
+    if not self.x and not self.y:
       raise InvalidVector
 
-    return super().__init__(self.x_componant, self.y_componant)
+    return super().__init__(self.x, self.y)
 
 
-  def __add__(
-    self,
-    addend: Vector2D
-  ) -> Vector2D:
-
-    sum_of_x_componants: float = self.x_componant + addend.x_componant
-    sum_of_y_componants: float = self.y_componant + addend.y_componant
-    return Vector2D(sum_of_x_componants, sum_of_y_componants)
+  def __add__(self, other: Vector2D) -> Vector2D:
+    return Vector2D(self.x + other.x, self.y + other.y)
 
 
-  def __radd__(
-      self,
-      addend: Vector2D
-  ) -> Vector2D:
-    return self + addend
+  def __radd__(self, other: Vector2D) -> Vector2D:
+    return self + other
 
 
-  def __sub__(
-    self,
-    subtrahend: Vector2D
-  ) -> Vector2D:
-    sum_of_x_componants: float = self.x_componant + subtrahend.x_componant
-    sum_of_y_componants: float = self.y_componant + subtrahend.y_componant
-    return Vector2D(sum_of_x_componants, sum_of_y_componants)
+  def __sub__(self, other: Vector2D) -> Vector2D:
+    return Vector2D(self.x - other.x, self.y - other.y)
 
 
-  def __rsub__(
-      self,
-      subtrahend: Vector2D
-  ) -> Vector2D:
-    return subtrahend - self
+  def __rsub__(self, other: Vector2D) -> Vector2D:
+    return other - self
 
 
-  def __mul__(
-      self,
-      scalar: float
-  ) -> Vector2D:
-    prod_of_x_componants: float = self.x_componant * scalar
-    prod_of_y_componants: float = self.y_componant * scalar
-    return Vector2D(prod_of_x_componants, prod_of_y_componants)
+  def __mul__(self, scalar: float) -> Vector2D:
+    return Vector2D(self.x * scalar, self.y * scalar)
 
 
-  def __rmul__(
-      self,
-      scalar: float
-  ) -> Vector2D:
+  def __rmul__(self, scalar: float) -> Vector2D:
     return self * scalar
 
 
-  def __truediv__(
-      self,
-      scalar: float
-    ) -> Vector2D:
-    div_of_x_componants: float = self.x_componant / scalar
-    div_of_y_componants: float = self.y_componant / scalar
-    return Vector2D(div_of_x_componants, div_of_y_componants)
+  def __truediv__(self, scalar: float) -> Vector2D:
+    if not scalar:
+      raise ValueError("Cannot scale a vector by zero. (Cannot divide by zero)")
+    return Vector2D(self.x / scalar, self.y / scalar)
 
 
-  def __rtruediv__(
-      self,
-      scalar: float
-  ) -> Vector2D:
+  def __rtruediv__(self, scalar: float) -> Vector2D:
     return scalar / self
 
 
@@ -305,11 +283,11 @@ class Vector2D(_Vector2DConstructor):
     if angle_type is AngleUnit.RAD:
       rotation = rotation * (180 / pi)
 
-    self.x_componant = (
-        cos(rotation * self.x_componant)
-        - sin(rotation * self.y_componant)
+    self.x = (
+        cos(rotation * self.x)
+        - sin(rotation * self.y)
     )
-    self.y_componant = (
-        sin(rotation * self.x_componant)
-        + cos(rotation * self.y_componant)
+    self.y = (
+        sin(rotation * self.x)
+        + cos(rotation * self.y)
     )

@@ -5,9 +5,6 @@ from typing import Any, Literal
 class Undefined:
   """Represents undefined."""
 
-  def __init__(self) -> None:
-    pass
-
 
   def __float__(self) -> float:
     return 0

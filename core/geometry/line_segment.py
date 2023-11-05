@@ -373,8 +373,7 @@ class LineSegment2D(_LineSegment2DConstructor):
     """
     Translates the line by the given distances.
 
-    Parameters
-    ----------
+    ### Parameters
     x_translation => The distance to translate horizontally.
     y_translation => The distance to translate vertically.
     """
