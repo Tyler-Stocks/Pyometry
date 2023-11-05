@@ -21,7 +21,7 @@ from core.exceptions import InvalidVector, FormatError, InvalidConstructor
 # --------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Vector2DConverter:
   x: float
   y: float
@@ -70,7 +70,7 @@ class _Vector2DConverter:
 # -------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Vector2DProperties(_Vector2DConverter):
   x: float
   y: float
@@ -137,7 +137,7 @@ class _Vector2DProperties(_Vector2DConverter):
 # -------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Vector2DConstructor(_Vector2DProperties):
   x: float
   y: float
@@ -223,7 +223,7 @@ class _Vector2DConstructor(_Vector2DProperties):
 # -------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class Vector2D(_Vector2DConstructor):
   """Class representing a two dimensional vector"""
   x: float
@@ -283,11 +283,6 @@ class Vector2D(_Vector2DConstructor):
     if angle_type is AngleUnit.RAD:
       rotation = rotation * (180 / pi)
 
-    self.x = (
-        cos(rotation * self.x)
-        - sin(rotation * self.y)
-    )
-    self.y = (
-        sin(rotation * self.x)
-        + cos(rotation * self.y)
-    )
+    self.x = cos(rotation * self.x) - sin(rotation * self.y)
+
+    self.y = sin(rotation * self.x) + cos(rotation * self.y)

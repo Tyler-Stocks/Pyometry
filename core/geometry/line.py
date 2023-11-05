@@ -19,22 +19,10 @@ from core.exceptions import InvalidConstructor, FormatError
 # Converter
 # -----------------------------------------------------------------------------
 
-@dataclass
+@dataclass(order = True)
 class _Line2DConverter:
   point_a: Point2D
   point_b: Point2D
-
-  def to_string(self) -> str:
-    """
-    Convert a Line2D to a string.
-
-    ### Return
-      Returns a string representation of a line in the form:\n
-        Point-A X: {value}, Point-B X: {value}\n
-        Point-B X: {value}, Point-B X: {value}\n
-    """
-    return f"""Point-A X: {self.point_a.x}, Point-A Y: {self.point_a.y}
-Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
 
 
   def to_list(self) -> list[Point2D]:
@@ -42,7 +30,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a list of Point2D's
 
     ### Return
-      Returns a list in the form [Point-A, Point-B]
+      A list in the form [Point-A, Point-B]
     """
     return [self.point_a, self.point_b]
 
@@ -52,7 +40,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a dict of Point2D's
 
     ### Return
-      Returns a dict in the form {"Point-A": [value], "Point-B" [value]}
+      A dict in the form {"Point-A": [value], "Point-B" [value]}
     """
 
     return {"Point-A": self.point_a, "Point-B": self.point_b}
@@ -62,7 +50,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
     Converts a Line2D into a tuple of Point2D's
 
     ### Return
-      Returns a tuple in the form (Point-A, Point-B)
+      A tuple in the form (Point-A, Point-B)
     """
 
     return self.point_a, self.point_b
@@ -73,7 +61,7 @@ Point-B X: {self.point_b.x}, Point-B Y: {self.point_b.y}"""
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Line2DProperties(_Line2DConverter):
   """_"""
   point_a: Point2D
@@ -84,10 +72,7 @@ class _Line2DProperties(_Line2DConverter):
     super().__init__(self.point_a, self.point_b)
 
 
-  def rise(
-      self,
-      return_type: Literal["Float"] | Literal["Fraction"]
-    ) -> float | Fraction:
+  def rise(self, return_type: Literal["Float"] | Literal["Fraction"]) -> float | Fraction:
     """
     Returns the rise of the line.
 
@@ -95,7 +80,7 @@ class _Line2DProperties(_Line2DConverter):
      * return_type -> The type of return that you would like.
 
     ### Return
-      Returns the vertical distance between two whole number points on the line.
+      The vertical distance between two whole number points on the line.
     """
     rise: float = self.point_a.y - self.point_b.y
 
@@ -103,10 +88,7 @@ class _Line2DProperties(_Line2DConverter):
       return rise
     return Fraction(rise)
 
-  def run(
-      self,
-      return_type: Literal["Float"] | Literal["Fraction"]
-    ) -> float | Fraction:
+  def run(self, return_type: Literal["Float"] | Literal["Fraction"]) -> float | Fraction:
     """
     Returns the run of the line.
 
@@ -114,7 +96,7 @@ class _Line2DProperties(_Line2DConverter):
       * return_type => The return type you would like
 
     ### Return
-      Returns the horizontal distance between two whole number points on the line
+      The horizontal distance between two whole number points on the line
     """
     run: float = self.point_a.x_position - self.point_b.x_position
 
@@ -126,17 +108,17 @@ class _Line2DProperties(_Line2DConverter):
 
 
   def slope(
-      self,
-      return_type: Literal["Fraction"] | Literal["Float"]
+    self,
+    return_type: Literal["Fraction"] | Literal["Float"]
   ) -> Fraction | float | Undefined :
     """
-    Returns the slope of the line.
+    Calculates the slope of the
 
     ### Parameters
       * return_type => defines the return type of the function either Fraction or Float.
 
     ### Returns
-      Returns the steepness of the line
+      The steepness of the line
     """
 
     if self.run("Float") == 0:
@@ -153,7 +135,12 @@ class _Line2DProperties(_Line2DConverter):
 
   @property
   def x_intercept(self) -> Point2D:
-    """Returns the point where the line crosses the x axis"""
+    """
+    Calculates the point where the line crosses the x-axis
+
+    ### Return
+      The point where the line crosses the x-axis (0, {intercept})
+    """
 
     if not self.point_a.y:
       return self.point_a
@@ -172,11 +159,16 @@ class _Line2DProperties(_Line2DConverter):
 
   @property
   def y_intercept(self) -> Point2D:
-    """Returns the point where the line crosses the y axis"""
+    """
+    Calculates the point where the line crosses the y-axis
 
-    if self.point_a.x_position == 0:
+    ### Return
+      The point where the line crosses the y-axis({intercept}, 0)
+    """
+
+    if not self.point_a.x_position:
       return self.point_a
-    elif self.point_b.x_position == 0:
+    elif not self.point_b.x_position:
       return self.point_b
     else:
       slope: float | Undefined | Fraction = self.slope("Float")
@@ -197,7 +189,7 @@ class _Line2DProperties(_Line2DConverter):
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Line2DConstructor(_Line2DProperties):
   """ Should not be accessed."""
   point_a: Point2D
@@ -318,7 +310,7 @@ class _Line2DConstructor(_Line2DProperties):
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class Line2D(_Line2DConstructor):
   """Class representing a line projected in 2D space."""
   point_a: Point2D

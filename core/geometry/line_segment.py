@@ -23,7 +23,7 @@ from core.exceptions import InvalidLineSegment, FormatError, InvalidConstructor
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _LineSegment2DConverter:
   """Internal Implementation detail, do not use."""
   start_point: Point2D
@@ -35,30 +35,28 @@ class _LineSegment2DConverter:
     Converts a line segment into a tuple of points
 
     ### Return
-      Returns a tuple in the form (Start Point, End Point)
+      A tuple in the form (Start Point, End Point)
     """
     return self.start_point, self.end_point
 
 
-  def to_str(self) -> str:
+  def to_dict(self) -> dict[str, Point2D]:
     """
-    Converts a line segment into a string
+    Converts a line segment into a dict.
 
     ### Return
-      Returns a string in the form "Start Point(x, y), End Point(x, y)"
+      A dict in the form {Start Point: {value}, End Point: {value}}
     """
-    return f"""
-      Start Point({self.start_point.x}, {self.start_point.y}), End Point({self.end_point.x}, {self.end_point.y})
-            """
-
-
-  def to_dict(self) -> dict[str, Point2D]:
-    """Converts a line segment into a dict."""
     return {"Start Point": self.start_point, "End Point": self.end_point}
 
 
   def to_list(self) -> list[Point2D]:
-    """Converts a line segment into a list."""
+    """
+    Converts a line segment into a list.
+
+    ### Return
+      A list in the form [Start Point, End Point]
+    """
     return [self.start_point, self.end_point]
 
 
@@ -67,7 +65,7 @@ class _LineSegment2DConverter:
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _LineSegment2DProperties(_LineSegment2DConverter):
   """Internal Implementation detail of LineSegment2D"""
   start_point: Point2D
@@ -79,25 +77,28 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 
   @property
   def center(self) -> Point2D:
-    """Returns the center of the line segment."""
+    """
+    Calculates the center of the line segment.
+
+    ### Return
+      Returns the point at the center of the line segment
+    """
     return Point2D(float(self.run(precision=5)) / 2, float(self.rise(prescision=5) / 2))
 
 
   def run(
       self,
-      return_type:
-        Literal["Float"] | Literal["Fraction"] = "Float",
-      precision:
-        SupportsIndex = 0
+      return_type: Literal["Float"] | Literal["Fraction"] = "Float",
+      precision: SupportsIndex = 0
   ) -> float | Fraction:
     """
-    Returns the run of the line as a float.
+    Calculates the run (horizontal distance) of the line segment
 
     ### Parameters
-      * return_type => defines the return type of the function either Fraction or Float.
+      * return_type => Defines the return type of the function
 
     ### Return
-      Returns the horizontal distance between whole number points on the line segment.
+      The horizontal distance between whole number points on the line segment.
     """
     run: float | Fraction = round((self.start_point.x - self.end_point.x) ** 2, precision)
 
@@ -112,14 +113,13 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
       prescision: SupportsIndex = 0
   ) -> float | Fraction:
     """
-    Returns the rise of the line as a float.
+    Calculates the rise (vertical distance) of the line segment
 
     ### Parameters
-      * return_type: Literal["Fraction"] | Literal["Float"]
-        defines the return type of the function either Fraction or Float.
+      * return_type => Defines the return type of the function
 
     ### Return
-      Returns the vertical distance between whole number points on the line segment
+      The vertical distance between whole number points on the line segment
     """
     rise: float | Fraction = round((self.start_point.y - self.end_point.y) ** 2, prescision)
 
@@ -136,7 +136,7 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
       * precision => How precise you would like the calculation to be.
 
     ### Return
-      Returns the length of the line segment
+      The length of the line segment
     """
     return sqrt(self.run(precision=precision) ** 2 + self.rise(prescision=precision) ** 2)
 
@@ -154,7 +154,7 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
       * precision   => How precise you would like the calculation to be
 
     ### Return
-      Returns A float or fraction if possible, if the line is vertical returns Undefined.
+      The slope of the line
     """
 
     if not self.run():
@@ -172,7 +172,7 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _LineSegment2DConstructor(_LineSegment2DProperties):
   """ Do not use. """
   start_point: Point2D
@@ -189,6 +189,9 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
     ### Parameters
       * points => The start and end point of a line segment (start_point, end_point)
+
+    ### Return
+      A LineSegment2D constructed from the supplied tuple
     """
 
     return LineSegment2D(points[0], points[1])
@@ -202,6 +205,9 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     ### Parameters
       * points => The start and end points of a line segment in the form:
         "start_point(x:y),end-point(x:y)"
+
+    ### Return
+      A LineSegment2D constructed from a supplied string
     """
 
 
@@ -282,6 +288,9 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
     ### Parameters
       * points => The start and end points of the line segment
         {"start_point": Point2D, "end_point}: "Point2D
+
+    ### Return
+      A LineSegment2D constructed from the supplied dictionary
     """
 
     if not "start_point" in points:
@@ -303,6 +312,9 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 
     ### Parameters
       * points => The points you would like to convert into a line
+
+    ### Return
+      A LineSegment2D constructed from the supplied list
     """
 
     if points[0] == points[1]:
@@ -316,7 +328,7 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
 # -----------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class LineSegment2D(_LineSegment2DConstructor):
   """Class representing a Line Segment in 2D space."""
   start_point: Point2D
@@ -335,14 +347,16 @@ class LineSegment2D(_LineSegment2DConstructor):
 
     ### Parameters
       point => The point you are checking is along a line.
+
+    ### Return
+      Whether or not a point in on the line segment
     """
 
-    is_between: bool = bool(
+    return bool(
       point.get_distance_between_points(self.start_point)
       + point.get_distance_between_points(self.end_point)
       == self.length()
       )
-    return is_between
 
 
   def translate_x(self, translation: float) -> None:
@@ -395,12 +409,25 @@ class LineSegment2D(_LineSegment2DConstructor):
 
 
   def is_parallel(self, line: LineSegment2D) -> bool:
-    """Checks to see if a line segment is parallel."""
+    """
+    Checks to see if a line segment is parallel.
+
+    ### Parameters
+      * line => The line to be checked
+
+    ### Return
+      Whether or not the lines are parallel
+    """
     return self.slope("Float") == line.slope("Float")
 
 
   def is_perpendicular(self, line: LineSegment2D) -> bool:
-    """Checks to see if a line segment is perpendicular"""
+    """
+    Checks to see if a line segment is perpendicular
+
+    ### Parameters
+      * line => The line to be checked
+    """
     if not self.slope("Float") is Undefined or line.slope("Float") is Undefined:
       return self.slope("Float") == 1 / line.slope()
 
@@ -410,7 +437,15 @@ class LineSegment2D(_LineSegment2DConstructor):
 
 
   def intersects(self, line_segment: LineSegment2D) -> bool:
-    """Checks whether or not two line segments intersects."""
+    """
+    Checks whether or not two line segments intersects.
+
+    ### Parameters
+      * line_segment => The line segment you would like to check
+
+    ### Return
+      Whether or not the line segments intersect
+    """
 
     orientation_1: Orientation = Point2D.get_orientation(
       self.start_point,
@@ -464,7 +499,16 @@ class LineSegment2D(_LineSegment2DConstructor):
 
   @staticmethod
   def on_segment(segment: LineSegment2D, point: Point2D) -> bool:
-    """Checks whether or not a point is on a line segment."""
+    """
+    Checks whether or not a point is on a line segment.
+
+    ### Parameters
+      * segment => The segment to check if the point is on
+      * point   => The point to check if is on the segment
+
+    ### Return
+      Whether or not the supplied point is on the supplied line segment
+    """
     if (
       (point.x <= max(segment.start_point.x, segment.end_point.x)) and
       (point.x >= min(segment.start_point.x, segment.end_point.x)) and

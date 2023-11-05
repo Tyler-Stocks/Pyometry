@@ -20,19 +20,10 @@ from core.exceptions import FormatError, InvalidConstructor
 # -------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Point2DConverter:
   x: float
   y: float
-
-  def to_str(self) -> str:
-    """
-    Converts the Point2D into a str
-
-    ### Return
-      Returns the point as a string in form "x: {value}, y: {value}
-    """
-    return f"x: {self.x}, y: {self.y}"
 
   def to_tuple(self) -> tuple[float, float]:
     """
@@ -58,7 +49,7 @@ class _Point2DConverter:
 # -------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _PointProperties(_Point2DConverter):
   """_"""
   x: float
@@ -107,7 +98,7 @@ class _PointProperties(_Point2DConverter):
 # --------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class _Point2DConstructor(_PointProperties):
   """A class representing a single point in 2d space."""
   x: float
@@ -184,7 +175,7 @@ class _Point2DConstructor(_PointProperties):
 # --------------------------------------------------------------------------------------------------
 
 
-@dataclass
+@dataclass(order = True)
 class Point2D(_Point2DConstructor):
   """Class Representing a Point2D"""
   x: float
