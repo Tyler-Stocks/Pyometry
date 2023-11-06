@@ -2,6 +2,6 @@ from enum import StrEnum, auto
 
 
 class AngleUnit(StrEnum):
-  """Enum representing different types of angles."""
+  """Enum to represent different angle units"""
   DEG = auto()
   RAD = auto()
