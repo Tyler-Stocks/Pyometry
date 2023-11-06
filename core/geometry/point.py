@@ -305,92 +305,107 @@ class Point2D(_Point2DConstructor):
     self.y *= -1
 
 
-  def rotate_about_origin(
-      self,
-      angle_of_rot: float,
-      angle_unit:   AngleUnit,
-      direction:    Orientation,
+  def rotate_clockwise_about_origin(
+    self,
+    angle: float,
+    unit: AngleUnit = AngleUnit.DEG
   ) -> None:
     """
-    Rotates the point about the origin.
-
-    ### Params
-      * angle_of_rot => The angle about the origin that you are rotating.
-      * angle_type   => The angle unit (DEG/RAD).
-      * direction    => The direction of rotation.
-    """
-    if angle_unit is AngleUnit.RAD:
-      angle_of_rot *= (pi / 180)
-    cos_theta: float = cos(angle_of_rot)
-    sin_theta: float = sin(angle_of_rot)
-
-    if direction is Orientation.CLOCKWISE:
-      self.x = -(self.x * cos_theta + self.y * sin_theta)
-      self.y = -(self.x * sin_theta + self.y * cos_theta)
-    elif direction is Orientation.COUNTERCLOCKWISE:
-      self.x = self.x * cos_theta - self.y * sin_theta
-      self.y = self.x * sin_theta + self.y * cos_theta
-
-
-
-  def rotate_point(
-      self,
-      other:        Point2D,
-      angle_of_rot: float,
-      angle_unit:   AngleUnit,
-      direction:    Orientation
-  ) -> None:
-    """
-    Rotates a point about another point.
+    Rotates the point clockwise about the origin.
 
     ### Parameters
-      * other => The point you are rotating about.
-      * angle_of_rot => The angle of rotation about the other point.
-      * angle_type => The angle unit (Deg/Rad)
-      * direction => The direction of rotation.
+      * angle => The angle about the origin that you are rotating.
+      * unit  => (DEG/RAD)
     """
-    if angle_unit is AngleUnit.RAD:
-      angle_of_rot *= (180 / pi)
-    cos_theta: float = cos(angle_of_rot)
-    sin_theta: float = sin(angle_of_rot)
+    if unit is AngleUnit.RAD:
+      angle *= (pi / 180)
+    cos_theta: float = cos(angle)
+    sin_theta: float = sin(angle)
 
-    translated_x_position = self.x - other.x
-    translated_y_position = self.y - other.y
+    self.x = -(self.x * cos_theta + self.y * sin_theta)
+    self.y = -(self.x * sin_theta + self.y * cos_theta)
 
-    if direction is Orientation.CLOCKWISE:
-      self.x = (
-        translated_x_position
-        * cos_theta
-        + translated_y_position
-        * sin_theta
-      )
-      self.y = (
-        translated_y_position
-        * sin_theta
-        + translated_y_position
-        * cos_theta
-      )
-    elif direction is Orientation.COUNTERCLOCKWISE:
-      self.x = (
-        translated_x_position
-        * cos_theta
-        - translated_y_position
-        * sin_theta
-      )
-      self.y = (
-        translated_y_position
-        * sin_theta
-        - translated_y_position
-        * sin_theta
-      )
+
+  def rotate_counterclockwise_about_origin(
+    self,
+    angle: float,
+    unit:  AngleUnit = AngleUnit.DEG
+  ) -> None:
+    """
+    Rotates the point counterclockwise about the origin.
+
+    ### Parameters
+      * angle => The angle about the origin that you are rotating.
+      * unit  => (DEG/RAD)
+    """
+
+    if unit is AngleUnit.RAD:
+      angle *= pi / 180
+
+    cos_theta: float = cos(angle)
+    sin_theta: float = sin(angle)
+
+    self.x = self.x * cos_theta - self.y * sin_theta
+    self.y = self.x * sin_theta + self.y * cos_theta
+
+
+
+  def rotate_clockwise(
+    self,
+    other: Point2D,
+    angle: float,
+    unit:  AngleUnit = AngleUnit.DEG
+  ) -> None:
+    """
+    Rotates a point clockwise around another point
+
+    ### Parameters
+      * other => THe point you are rotating about
+      * angle => The angle of rotation around the other point
+      * unit  => (Deg/Rad)
+    """
+
+    if unit is AngleUnit.RAD:
+      angle *= 180 / pi
+
+    cos_theta: float = cos(angle)
+    sin_theta: float = sin(angle)
+
+    x_pos = self.x - other.x
+    y_pos = self.y - other.y
+
+    self.x = x_pos * cos_theta + y_pos * sin_theta
+    self.y = y_pos * sin_theta + y_pos * cos_theta
+
+
+  def rotate_counterclockwise(
+    self,
+    other: Point2D,
+    angle: float,
+    unit:  AngleUnit = AngleUnit.DEG
+  ) -> None:
+    """
+    Rotates the point counterclockwise about another point.
+
+    ### Parameters
+      * other => The point that you are rotating about
+      * angle => The angle of rotation about the other point
+      * unit  => (Deg/Rad)
+    """
+    if unit is AngleUnit.RAD:
+      angle *= (180 / pi)
+    cos_theta: float = cos(angle)
+    sin_theta: float = sin(angle)
+
+    x_pos = self.x - other.x
+    y_pos = self.y - other.y
+
+    self.x = x_pos * cos_theta - y_pos * sin_theta
+    self.y = y_pos * sin_theta - y_pos * cos_theta
 
 
   @staticmethod
-  def get_orientation(
-    point_1: Point2D,
-    point_2: Point2D,
-    point_3: Point2D
-  ) -> Orientation:
+  def get_orientation(point_1: Point2D, point_2: Point2D, point_3: Point2D) -> Orientation:
     """
     Gets the orientation of three points.
 
