@@ -346,8 +346,8 @@ class Point2D(_Point2DConstructor):
     ### Parameters
       * other => The point you are rotating about.
       * angle_of_rot => The angle of rotation about the other point.
-      angle_type => The angle unit (Deg/Rad)
-      direction => The direction of rotation.
+      * angle_type => The angle unit (Deg/Rad)
+      * direction => The direction of rotation.
     """
     if angle_unit is AngleUnit.RAD:
       angle_of_rot *= (180 / pi)
