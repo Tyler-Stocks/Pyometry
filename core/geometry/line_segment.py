@@ -72,9 +72,6 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
   start_point: Point2D
   end_point:   Point2D
 
-  def __post_init__(self) -> None:
-    return super().__init__(self.start_point, self.end_point)
-
 
   @property
   def center(self) -> Point2D:
@@ -88,9 +85,9 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 
 
   def run(
-      self,
-      return_type: Literal["Float"] | Literal["Fraction"] = "Float",
-      precision: SupportsIndex = 0
+    self,
+    return_type: Literal["Float"] | Literal["Fraction"] = "Float",
+    precision: SupportsIndex = 0
   ) -> float | Fraction:
     """
     Calculates the run (horizontal distance) of the line segment
@@ -109,9 +106,9 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 
 
   def rise(
-      self,
-      return_type: Literal["Float"] | Literal["Fraction"] = "Float",
-      prescision: SupportsIndex = 0
+    self,
+    return_type: Literal["Float"] | Literal["Fraction"] = "Float",
+    prescision: SupportsIndex = 0
   ) -> float | Fraction:
     """
     Calculates the rise (vertical distance) of the line segment
@@ -143,10 +140,10 @@ class _LineSegment2DProperties(_LineSegment2DConverter):
 
 
   def slope(
-      self,
-      return_type: Literal["Float"] | Literal["Fraction"] = "Float",
-      precision: SupportsIndex = 3
-    ) -> float | Undefined | Fraction:
+    self,
+    return_type: Literal["Float"] | Literal["Fraction"] = "Float",
+    precision: SupportsIndex = 3
+  ) -> float | Undefined | Fraction:
     """
     Calculates the slope of a line segment
 
@@ -178,9 +175,6 @@ class _LineSegment2DConstructor(_LineSegment2DProperties):
   """Internal Implementation Detail Of LineSegment2D"""
   start_point: Point2D
   end_point: Point2D
-
-  def __post_init__(self) -> None:
-    super().__init__(self.start_point, self.end_point)
 
 
   @classmethod
@@ -339,15 +333,13 @@ class LineSegment2D(_LineSegment2DConstructor):
     if self.start_point == self.end_point:
       raise InvalidLineSegment
 
-    return super().__init__(self.start_point, self.end_point)
-
 
   def is_between(self, point: Point2D) -> bool:
     """
     Checks if a point is along the line segment.
 
     ### Parameters
-      point => The point you are checking is along a line.
+      * point => The point you are checking is along a line.
 
     ### Return
       Whether or not a point in on the line segment
@@ -365,7 +357,7 @@ class LineSegment2D(_LineSegment2DConstructor):
     Translates the line along the x axis.
 
     ### Parameters
-    translation => The distance to translate the line segment.
+      * translation => The distance to translate the line segment.
     """
 
     self.start_point.x += translation
@@ -377,7 +369,7 @@ class LineSegment2D(_LineSegment2DConstructor):
     Translates the line along the y axis.
 
     ### Parameters
-    translation => The distance to translate the line segment.
+      * translation => The distance to translate the line segment.
     """
 
     self.start_point.y += translation
@@ -389,8 +381,8 @@ class LineSegment2D(_LineSegment2DConstructor):
     Translates the line by the given distances.
 
     ### Parameters
-    x_translation => The distance to translate horizontally.
-    y_translation => The distance to translate vertically.
+      * x_translation => The distance to translate horizontally.
+      * y_translation => The distance to translate vertically.
     """
 
     self.translate_x(x_translation)

@@ -27,6 +27,7 @@ class _Point2DConverter:
   """Internal Implementation Detail of Point2D"""
   x: float
   y: float
+  
 
   def to_tuple(self) -> tuple[float, float]:
     """
@@ -68,9 +69,6 @@ class _PointProperties(_Point2DConverter):
   """Internal Implementation Detail of Point2D"""
   x: float
   y: float
-
-  def __post_init__(self) -> None:
-    return super().__init__(self.x, self.y)
 
 
   @property
@@ -121,8 +119,6 @@ class _Point2DConstructor(_PointProperties):
   x: float
   y: float
 
-  def __post_init__(self) -> None:
-    return super().__init__(self.x, self.y)
 
   @classmethod
   def from_tuple(cls, position: tuple[float, float]) -> Point2D:
@@ -207,8 +203,6 @@ class Point2D(_Point2DConstructor):
   x: float
   y: float
 
-  def __post_init__(self) -> None:
-    return super().__init__(self.x, self.y)
 
   def __eq__(self, other: object) -> bool:
     if not isinstance(other, Point2D):

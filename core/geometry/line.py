@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 # Internal Imports
 from core.geometry.point import Point2D
+from core.geometry.line_segment import LineSegment2D
 from core.util.undefined import Undefined
 from core.exceptions import InvalidConstructor, FormatError
 
@@ -68,10 +69,6 @@ class _Line2DProperties(_Line2DConverter):
   point_b: Point2D
 
 
-  def __post_init__(self) -> None:
-    super().__init__(self.point_a, self.point_b)
-
-
   def rise(self, return_type: Literal["Float"] | Literal["Fraction"]) -> float | Fraction:
     """
     Returns the rise of the line.
@@ -109,7 +106,7 @@ class _Line2DProperties(_Line2DConverter):
 
   def slope(
     self,
-    return_type: Literal["Fraction"] | Literal["Float"]
+    return_type: Literal["Fraction"] | Literal["Float"] = "Float"
   ) -> Fraction | float | Undefined :
     """
     Calculates the slope of the
@@ -191,12 +188,10 @@ class _Line2DProperties(_Line2DConverter):
 
 @dataclass(order = True)
 class _Line2DConstructor(_Line2DProperties):
-  """ Should not be accessed."""
+  """Internal Implementation Detail of Line2D"""
   point_a: Point2D
   point_b: Point2D
 
-  def __post_init__(self) -> None:
-    super().__init__(self.point_a, self.point_b)
 
   @classmethod
   def from_str(cls, points: str) -> Line2D:
@@ -263,8 +258,7 @@ class _Line2DConstructor(_Line2DProperties):
 
     end_point: Point2D = Point2D(
       float(second_point_values[0]),
-      float(second_point_values[-1])
-    )
+      float(second_point_values[-1]))
 
     return Line2D(start_point, end_point)
 
@@ -275,7 +269,7 @@ class _Line2DConstructor(_Line2DProperties):
     Constructs a line from a dictionary.
 
     ### Parameters
-      * point: A dictionary representing the Line in the form
+      * point => A dictionary representing the Line in the form
         {"Point-A": Point2D, "Point-B": Point2D}
     """
     if not "Point-A" in points or not "Point-B" in points:
@@ -316,8 +310,6 @@ class Line2D(_Line2DConstructor):
   point_a: Point2D
   point_b: Point2D
 
-  def __post_init__(self) -> None:
-    return super().__init__(self.point_a, self.point_b)
 
   def is_perpendicular(self, other: Line2D) -> bool:
     """
@@ -327,18 +319,16 @@ class Line2D(_Line2DConstructor):
       * other => The line that you are comparing against.
     """
 
-    if self.slope("Float") is Undefined and other.slope("Float") == 0:
+    if self.slope() is Undefined and not other.slope():
       return True
-    elif self.slope("Float") == 0 and other.slope("Float") is Undefined:
+    elif not self.slope() and other.slope() is Undefined:
       return True
     else:
-      is_perpendicular = (
-        self.slope("Float") ==
-        -1 / float(other.slope("Float")))
+      is_perpendicular = self.slope() == -1 / float(other.slope())
       return is_perpendicular
 
 
-  def is_parallel(self, other: Line2D) -> bool:
+  def is_parallel(self, other: Line2D | LineSegment2D) -> bool:
     """
     Returns whether or not two lines are parallel.
 
@@ -346,4 +336,4 @@ class Line2D(_Line2DConstructor):
       * other => The line that you are comparing against.
     """
 
-    return self.slope("Float") == other.slope("Float")
+    return self.slope() == other.slope()

@@ -9,7 +9,7 @@ class InvalidConstructor(Exception):
   """Raised when not enough constructor information is provided."""
 
   def __init__(self) -> None:
-    super().__init__("Not enought information was provided to construct the object.")
+    super().__init__("Not enough information was provided to construct the object.")
 
 
 class InvalidLineSegment(Exception):
