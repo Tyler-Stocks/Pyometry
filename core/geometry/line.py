@@ -85,6 +85,7 @@ class _Line2DProperties(_Line2DConverter):
       return rise
     return Fraction(rise)
 
+
   def run(self, return_type: Literal["Float"] | Literal["Fraction"]) -> float | Fraction:
     """
     Returns the run of the line.
@@ -181,6 +182,8 @@ class _Line2DProperties(_Line2DConverter):
       return Point2D(0, float(y_intercept_value))
 
 
+
+
 # -----------------------------------------------------------------------------
 # Constructor
 # -----------------------------------------------------------------------------
@@ -224,8 +227,7 @@ class _Line2DConstructor(_Line2DProperties):
          Invalid string format for start_point.\n
          Excpected "x-position:y-position",
          got {first_point}.
-         """
-      )
+         """)
 
     first_point_values: list[str] = first_point.split(":")
 

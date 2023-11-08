@@ -391,14 +391,14 @@ class LineSegment2D(_LineSegment2DConstructor):
 
   def mirror_x(self) -> None:
     """Mirrors the line segment across the x-axis."""
-    self.start_point.mirror_x_axis()
-    self.end_point.mirror_x_axis()
+    self.start_point.mirror_x()
+    self.end_point.mirror_x()
 
 
   def mirror_y(self) -> None:
     """Mirrors the line segment acrossthe y-axis."""
-    self.start_point.mirror_y_axis()
-    self.end_point.mirror_y_axis()
+    self.start_point.mirror_y()
+    self.end_point.mirror_y()
 
 
   def is_parallel(self, line: LineSegment2D | Line2D) -> bool:
@@ -502,11 +502,9 @@ class LineSegment2D(_LineSegment2DConstructor):
     ### Return
       Whether or not the supplied point is on the supplied line segment
     """
-    if (
+    return (
       (point.x <= max(segment.start_point.x, segment.end_point.x)) and
       (point.x >= min(segment.start_point.x, segment.end_point.x)) and
       (point.y <= max(segment.start_point.y, segment.end_point.y)) and
       (point.y >= min(segment.start_point.y, segment.end_point.y))
-    ):
-      return True
-    return False
+    )

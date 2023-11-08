@@ -27,7 +27,7 @@ class _Point2DConverter:
   """Internal Implementation Detail of Point2D"""
   x: float
   y: float
-  
+
 
   def to_tuple(self) -> tuple[float, float]:
     """
@@ -289,12 +289,12 @@ class Point2D(_Point2DConstructor):
     return sqrt(self.get_horizontal_distance(other) ** 2 + self.get_vertical_distance(other) ** 2)
 
 
-  def mirror_x_axis(self) -> None:
+  def mirror_x(self) -> None:
     """Mirrors the point across to the X axis."""
     self.x *= -1
 
 
-  def mirror_y_axis(self) -> None:
+  def mirror_y(self) -> None:
     """Mirrors the point across to the Y axis."""
     self.y *= -1
 

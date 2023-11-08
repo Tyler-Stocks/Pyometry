@@ -5,8 +5,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import pi
 
 from core.geometry.point import Point2D
+from core.util.angle_unit import AngleUnit
 
 
 # -------------------------------------------------------------------------------------------------
@@ -137,13 +139,6 @@ class _Ray2DConstructer(_Ray2DConverter):
 
 
 # -------------------------------------------------------------------------------------------------
-# Properties
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-# -------------------------------------------------------------------------------------------------
 # Public Interface
 # -------------------------------------------------------------------------------------------------
 
@@ -155,4 +150,65 @@ class Ray2D(_Ray2DConstructer):
   direction:   float
 
 
-  
+  def rotate(self, distance: float, unit: AngleUnit) -> None:
+    """
+    Rotates the ray by the supplied distance
+
+    ### Parameters
+      * distance => The amount you would like to rotate
+      * unit => Deg/Rad
+    """
+
+    if unit is AngleUnit.RAD:
+      distance *= (180 / pi)
+
+    self.direction += distance
+
+
+  def translate_x(self, distance: float) -> None:
+    """
+    Translates the ray along the x axis by the supplied distance
+
+    ### Parameters
+      * distance => The distance to translate the ray
+    """
+
+    self.start_point.x += distance
+
+
+  def translate_y(self, distance: float) -> None:
+    """
+    Translates the ray along the y axis by the supplied distance
+
+    ### Parameters
+      * distance => The distance to translate the ray
+    """
+
+    self.start_point.x += distance
+
+
+  def translate(self, x_distance: float, y_distance: float) -> None:
+    """
+    Translates the ray by the supplied distance
+
+    ### Parameters
+      * x_distance => The distance to translate the ray along the x axis
+      * y_distance => The distance to translate the ray along the y axis
+    """
+
+    self.translate_x(x_distance)
+    self.translate_y(y_distance)
+
+
+  def mirror_x(self) -> None:
+    """Mirrors the ray across the x axis"""
+
+    self.direction *= -1
+    self.start_point.mirror_x()
+
+
+  def mirror_y(self) -> None:
+    """Mirrors the ray across the y axis"""
+
+    self.direction *= -1
+    self.start_point.mirror_y()
